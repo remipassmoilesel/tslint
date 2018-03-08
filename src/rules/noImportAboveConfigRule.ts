@@ -77,13 +77,21 @@ export class Rule extends Lint.Rules.AbstractRule {
     }
 }
 
-const fs = require("fs");
-const CircularJSON = require('circular-json');
-fs.existsSync('/tmp')
+const debug = console.log;
 
 function walk(ctx: Lint.WalkContext<void>) {
-    for (const name of findImports(ctx.sourceFile, ImportKind.AllRequireLike)) {
-        console.log(CircularJSON.stringify(name, null, 2));
-//        ctx.addFailureAtNode(name.parent!, Rule.FAILURE_STRING);
+
+    const filename = ctx.sourceFile.fileName;
+    if (!filename.endsWith("ts")) {
+        return;
+    }
+
+    debug(filename);
+
+    for (const name of findImports(ctx.sourceFile, ImportKind.All)) {
+
+        if (name.getFullText().match(/\.\.\//i)) {
+            // ctx.addFailureAtNode(name.parent!, Rule.FAILURE_STRING);
+        }
     }
 }
