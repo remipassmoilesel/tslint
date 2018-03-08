@@ -26,3 +26,5 @@ docs/formatters/*/index.html
 
 /coverage/
 /.nyc_output
+
+.idea
